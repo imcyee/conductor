@@ -1,5 +1,8 @@
 **/node_modules
 **/npm-debug.log
+
+docker/mysql/logs
+docker/mysql/conductor_mysql
 ui/dist
 ui/package-lock.json
 .gradle
