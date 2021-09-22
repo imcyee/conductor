@@ -1,0 +1,1 @@
+to run light: docker-compose -f docker-compose.light.yaml up

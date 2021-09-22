@@ -4,7 +4,7 @@ services:
 
   conductor-server:
     environment:
-      - CONFIG_PROP=config-mysql.properties
+      - CONFIG_PROP=config-mysql-multinode.properties
     image: conductor:server
     build:
       context: ../../
@@ -65,31 +65,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 12
-
-  # elasticsearch:
-  #   image: elasticsearch:6.8.15
-  #   environment:
-  #     - "ES_JAVA_OPTS=-Xms512m -Xmx1024m"
-  #     - transport.host=0.0.0.0
-  #     - discovery.type=single-node
-  #     - xpack.security.enabled=false
-  #   networks:
-  #     - internal
-  #   ports:
-  #     - 9200:9200
-  #     - 9300:9300
-  #   healthcheck:
-  #     test: timeout 5 bash -c 'cat < /dev/null > /dev/tcp/localhost/9300'
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 12
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-size: "1k"
-  #       max-file: "3"
-
-        
+ 
   # https://www.elastic.co/guide/en/elasticsearch/reference/5.6/docker.html
   # if Elasticsearch Container Stopped with Exit 78
   # run `sudo sysctl -w vm.max_map_count=262144` in terminal 

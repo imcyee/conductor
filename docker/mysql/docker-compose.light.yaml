@@ -1,0 +1,49 @@
+version: '2.3'
+
+services:
+
+  conductor-server:
+    environment:
+      - CONFIG_PROP=config-mysql-light.properties
+    image: conductor:server
+    build:
+      context: ../../
+      dockerfile: docker/server/Dockerfile
+    networks:
+      - internal
+    ports:
+      - 8080:8080
+      # - 8090:8090 # seems to cause trouble for testcontainer
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ../server/config:/app/config
+      - ./logs:/app/logs
+
+  mysql: 
+    image: mysql:8.0.25 # 5.6 and below is not supported
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: conductor
+      MYSQL_USER: conductor
+      MYSQL_PASSWORD: conductor
+    volumes: 
+      - ./conductor_mysql:/var/lib/mysql
+    networks:
+      - internal
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: timeout 5 bash -c 'cat < /dev/null > /dev/tcp/localhost/3306'
+      interval: 5s
+      timeout: 5s
+      retries: 12
+ 
+volumes:
+  conductor_mysql:
+
+networks:
+  internal:
